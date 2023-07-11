@@ -10,6 +10,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="item")
@@ -58,4 +59,7 @@ public class Item extends BaseEntity {
     public void addStock(int cancelNumber){
         this.stockNumber += cancelNumber;
     }
+
+    @OneToMany(mappedBy = "item",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemImg> itemImg;
 }

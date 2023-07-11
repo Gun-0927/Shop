@@ -3,6 +3,7 @@ package com.shop.controller;
 import com.shop.dto.ItemFormDto;
 import com.shop.dto.ItemSearchDto;
 import com.shop.entity.Item;
+import com.shop.repository.ItemRepository;
 import com.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ import java.util.Optional;
 public class ItemController {
 
     private final ItemService itemService;
+
+    private final ItemRepository itemRepository;
 
     @GetMapping(value="/admin/item/new")
     public String itemForm(Model model){
@@ -110,6 +113,14 @@ public class ItemController {
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
         model.addAttribute("item",itemFormDto);
         return "item/itemDtl";
+    }
+    @PostMapping(value = "/admin/item/delete/{itemId}")
+    public String itemDelete(Model model,@PathVariable("itemId")Long itemId){
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        itemRepository.delete(item);
+
+
+        return "redirect:/admin/items";
     }
 }
 
